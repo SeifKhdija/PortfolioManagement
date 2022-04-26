@@ -68,12 +68,13 @@ contract PortfolioToken is ERC20  {
 
     function join(uint amountIn ,address tokenDeposit) external{
     require(users[msg.sender] == false , "User is elready joined");
+    IERC20(tokenDeposit).transferFrom(msg.sender,address(this) ,amountIn);
     users[msg.sender] = true;
     tokenDeposited memory depositToken = tokenDeposited(tokenDeposit,amountIn);  
     tokensDeposited[msg.sender] = depositToken;
-    IERC20(tokenDeposit).transferFrom(msg.sender,address(this) ,amountIn);
-    }
     
+    }
+
     function swap() external{
     require(users[msg.sender] == true , "Not joined user");
     require(tokensDeposited[msg.sender].amount >0, "User didn't deposit yet");

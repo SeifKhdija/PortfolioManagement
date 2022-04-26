@@ -12,8 +12,8 @@ contract PortfolioToken is ERC20  {
     // users joined this portfolio
     mapping (address => bool) public users;
     // user with the amount of each deposited asset
-    mapping (address => tokenDeposited[]) tokensDeposited;
-    struct tokenDeposited {
+    mapping (address => tokenDeposited) public tokensDeposited;
+    struct tokenDeposited{
         address tokenName ; 
         uint256 amount;
     }
@@ -66,21 +66,27 @@ contract PortfolioToken is ERC20  {
         }
     }
 
-    function swap(uint amountIn ,address tokenDeposit ) external{
+    function join(uint amountIn ,address tokenDeposit) external{
+    require(users[msg.sender] == false , "User is elready joined");
     users[msg.sender] = true;
     tokenDeposited memory depositToken = tokenDeposited(tokenDeposit,amountIn);  
-    tokensDeposited[msg.sender].push(depositToken);
+    tokensDeposited[msg.sender] = depositToken;
     IERC20(tokenDeposit).transferFrom(msg.sender,address(this) ,amountIn);
+    }
+    
+    function swap() external{
+    require(users[msg.sender] == true , "Not joined user");
+    require(tokensDeposited[msg.sender].amount >0, "User didn't deposit yet");
     address tokenToSwap ;
     uint pourcentage ; 
     for (uint i=0 ; i < pourcentageAssets.length ; i++)
     {
             tokenToSwap = pourcentageAssets[i].assetAddress ;
             pourcentage = pourcentageAssets[i].assetValue ;
-            pair = [ tokenDeposit ,tokenToSwap ];
-            uint256 value = amountIn.mul(pourcentage).div(100);
-            IERC20(tokenDeposit).approve(UNISWAP_V2_ROUTER , value);
-            IUniswapV2Router(UNISWAP_V2_ROUTER).swapExactTokensForTokens(value, 0,pair  , address(this), block.timestamp) ;
+            pair = [ tokensDeposited[msg.sender].tokenName ,tokenToSwap ];
+            uint256 value = tokensDeposited[msg.sender].amount.mul(pourcentage).div(100);
+            IERC20(tokensDeposited[msg.sender].tokenName).approve(UNISWAP_V2_ROUTER , value);
+            IUniswapV2Router(UNISWAP_V2_ROUTER).swapExactTokensForTokens(value, 0,pair , address(this), block.timestamp) ;
         }
     }
 

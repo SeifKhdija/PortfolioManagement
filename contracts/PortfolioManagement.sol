@@ -27,8 +27,9 @@ contract PortfolioManagement {
       emit PortfolioCreated(msg.sender, address(portfolioToken),address(portfolioNFT), name,symbol, description , assetsNames, assetsValues, strategy, yield);
      }
 
-     function joinPortfolio(address user, address portfolioAddress,uint amountDeposit ,address tokenDeposit ) public{
-      PortfolioToken p = PortfolioToken(portfolioAddress);
-      p.swap(amountDeposit, tokenDeposit);
+     function joinPortfolio(address portfolioAddress,uint amountDeposit ,address tokenDeposit ) public{
+      PortfolioToken portfolioJoined = PortfolioToken(portfolioAddress);
+      portfolioJoined.join(amountDeposit, tokenDeposit);
+      portfolioJoined.swap();
      }
 }

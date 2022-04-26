@@ -1,5 +1,6 @@
 node_modules
 .secret
 .infura
+build
 package-lock.json
 package-lock

@@ -1,0 +1,7 @@
+const WETH = artifacts.require('WETH')
+const UniswapV2Router02 = artifacts.require('UniswapV2Router02')
+const UniswapV2Pair = artifacts.require('UniswapV2Pair')
+const UniswapV2Factory = artifacts.require('UniswapV2Factory')
+const PortfolioManagement = artifacts.require('PortfolioManagement')
+const PortfolioToken = artifacts.require('PortfolioToken')
+const PortfolioNFT = artifacts.require('PortfolioNFT')

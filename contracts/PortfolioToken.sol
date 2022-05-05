@@ -5,7 +5,6 @@ import '@openzeppelin/contracts/token/ERC20/ERC20.sol' ;
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 contract PortfolioToken is ERC20  {
     using SafeMath for uint256;
-    address private constant UNISWAP_V2_ROUTER = 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D;
     address[] public pair;
     address owner;
     string description;
